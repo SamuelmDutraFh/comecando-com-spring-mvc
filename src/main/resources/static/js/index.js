@@ -24,7 +24,30 @@ $(function(){
 	});
 	
 	$('[rel="tooltip"]').tooltip();
+	$('.js-currency').maskMoney({decimal: ',', thousands:'.', allowZero: true});
 	
+	$('.js-atualizar-status').on('click', function(event){
+		event.preventDefault();
+		
+		const botaoReceber = $(event.currentTarget);
+		const urlReceber = botaoReceber.attr('href');
+		
+		let response = $.ajax({
+			url: urlReceber,
+			type: 'PUT',
+		});
+		
+		response.done(function(e){
+			const codigoTitulo = botaoReceber.data('codigo');
+			$('[data-role=' + codigoTitulo + ']').html('<span class="label label-success">'+ e + '</span>');
+			botaoReceber.hide();
+		});
+		response.fail(function(e){
+			console.log(e);
+			alert('Erro recebendo cobrança');
+		})
+		
+	});
 	
 });
 
